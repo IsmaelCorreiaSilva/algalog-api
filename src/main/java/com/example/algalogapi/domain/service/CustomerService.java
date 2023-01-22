@@ -26,7 +26,7 @@ public class CustomerService {
     @Transactional
     public Customer insert(Customer customer){
         var result = customerRepository.findByEmail(customer.getEmail())
-                .stream().anyMatch(c -> c.equals(customer));
+                .stream().anyMatch(c -> !c.equals(customer));
 
         if(result)
             throw new BusinessRuleException("Já existe cliente cadastrado com esse email!!!");
