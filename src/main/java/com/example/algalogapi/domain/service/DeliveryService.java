@@ -11,6 +11,10 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
+import java.time.OffsetDateTime;
+import java.util.List;
+import java.util.Optional;
+import java.util.UUID;
 
 @Service
 public class DeliveryService {
@@ -28,8 +32,14 @@ public class DeliveryService {
 
         delivery.setCustomer(customer);
         delivery.setStatus(StatusDelivery.PENDENTE);
-        delivery.setDateOrdered(LocalDateTime.now());
+        delivery.setDateOrdered(OffsetDateTime.now());
 
         return deliveryRepository.save(delivery);
+    }
+    public Optional<Delivery> findById(UUID id){
+        return deliveryRepository.findById(id);
+    }
+    public List<Delivery> findAll(){
+        return deliveryRepository.findAll();
     }
 }

@@ -3,22 +3,16 @@ package com.example.algalogapi.api.expectionhandler;
 import com.fasterxml.jackson.annotation.JsonInclude;
 
 import java.time.LocalDateTime;
+import java.time.OffsetDateTime;
 import java.util.List;
 
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class Error {
     private Integer status;
-    private LocalDateTime dateTime;
     private String Title;
+    private OffsetDateTime dateTime;
+
     private List<Field> fields;
-
-    public List<Field> getFields() {
-        return fields;
-    }
-
-    public void setFields(List<Field> fields) {
-        this.fields = fields;
-    }
 
     public Integer getStatus() {
         return status;
@@ -28,19 +22,27 @@ public class Error {
         this.status = status;
     }
 
-    public LocalDateTime getDateTime() {
-        return dateTime;
-    }
-
-    public void setDateTime(LocalDateTime dateTime) {
-        this.dateTime = dateTime;
-    }
-
     public String getTitle() {
         return Title;
     }
 
     public void setTitle(String title) {
         Title = title;
+    }
+
+    public OffsetDateTime getDateTime() {
+        return dateTime;
+    }
+
+    public void setDateTime(OffsetDateTime dateTime) {
+        this.dateTime = dateTime;
+    }
+
+    public List<Field> getFields() {
+        return fields;
+    }
+
+    public void setFields(List<Field> fields) {
+        this.fields = fields;
     }
 }

@@ -22,13 +22,10 @@ public class CustomerController {
     }
     @GetMapping("/{id}")
     public ResponseEntity<Customer> find(@PathVariable UUID id){
-        var customer = customerService.findById(id);
+         return  customerService.findById(id)
+                    .map(ResponseEntity::ok)
+                    .orElse(ResponseEntity.notFound().build());
 
-        if (customer.isPresent()){
-            return ResponseEntity.ok().body(customer.get());
-        }
-
-        return ResponseEntity.notFound().build();
     }
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)

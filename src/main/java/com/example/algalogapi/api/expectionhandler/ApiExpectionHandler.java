@@ -18,6 +18,7 @@ import org.springframework.web.servlet.LocaleContextResolver;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
 import java.time.LocalDateTime;
+import java.time.OffsetDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
@@ -43,7 +44,7 @@ public class ApiExpectionHandler extends ResponseEntityExceptionHandler {
 
         Error error = new Error();
         error.setStatus(status.value());
-        error.setDateTime(LocalDateTime.now());
+        error.setDateTime(OffsetDateTime.now());
         error.setTitle("Erro ao válidar os campos, por favor preencha os campos correntamente!!!");
         error.setFields(fieldList);
 
@@ -56,7 +57,7 @@ public class ApiExpectionHandler extends ResponseEntityExceptionHandler {
 
         Error error = new Error();
         error.setStatus(status.value());
-        error.setDateTime(LocalDateTime.now());
+        error.setDateTime(OffsetDateTime.now());
         error.setTitle(ex.getMessage());
         return handleExceptionInternal(ex, error, new HttpHeaders(), status, request);
     }
