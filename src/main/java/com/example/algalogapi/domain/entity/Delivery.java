@@ -1,5 +1,6 @@
 package com.example.algalogapi.domain.entity;
 
+import com.example.algalogapi.domain.exception.BusinessRuleException;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -44,6 +45,16 @@ public class Delivery {
         this.getEvents().add(event);
 
         return event;
+    }
+    public void finalize(){
+        if(!isFinishable()){
+            throw new BusinessRuleException("Entrega não pode ser finalizada!");
+        }
+        setStatus(StatusDelivery.FINALIZADA);
+        setDateFinalization(OffsetDateTime.now());
+    }
+    public boolean isFinishable(){
+        return StatusDelivery.PENDENTE.equals(getStatus());
     }
 
 

@@ -4,6 +4,7 @@ import com.example.algalogapi.api.assembler.DeliveryAssembler;
 import com.example.algalogapi.api.dto.DeliveryRequest;
 import com.example.algalogapi.api.dto.DeliveryResponse;
 import com.example.algalogapi.domain.service.DeliveryService;
+import com.example.algalogapi.domain.service.FinalizeDeliveryService;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -19,6 +20,7 @@ import java.util.UUID;
 public class DeliveryController {
     private DeliveryService deliveryService;
     private DeliveryAssembler deliveryAssembler;
+    private FinalizeDeliveryService finalizeDeliveryService;
 
 
 
@@ -35,6 +37,12 @@ public class DeliveryController {
                 .orElse(ResponseEntity.notFound().build());
 
     }
+    @PutMapping("/{id}/finalize")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void finalize(@PathVariable UUID id){
+        finalizeDeliveryService.finalizeDelivery(id);
+    }
+
     @GetMapping
     public List<DeliveryResponse> findAll(){
         return deliveryAssembler.toCollectionDto(deliveryService.findAll());
