@@ -1,6 +1,8 @@
 package com.example.algalogapi.api.expectionhandler;
 
 import com.example.algalogapi.domain.exception.BusinessRuleException;
+import com.example.algalogapi.domain.exception.EntityNotFoundException;
+import org.hibernate.action.internal.EntityActionVetoException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
 import org.springframework.context.i18n.LocaleContextHolder;
@@ -49,6 +51,17 @@ public class ApiExpectionHandler extends ResponseEntityExceptionHandler {
         error.setFields(fieldList);
 
         return  handleExceptionInternal(ex, error, headers, status, request);
+    }
+    @ExceptionHandler(EntityNotFoundException.class)
+    public ResponseEntity<Object> handleEntityNotFoundExpection(BusinessRuleException ex, WebRequest request){
+
+        HttpStatus status = HttpStatus.NOT_FOUND;
+
+        Error error = new Error();
+        error.setStatus(status.value());
+        error.setDateTime(OffsetDateTime.now());
+        error.setTitle(ex.getMessage());
+        return handleExceptionInternal(ex, error, new HttpHeaders(), status, request);
     }
     @ExceptionHandler(BusinessRuleException.class)
     public ResponseEntity<Object> handleBusinessRoleExpection(BusinessRuleException ex, WebRequest request){

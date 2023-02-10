@@ -1,8 +1,12 @@
 package com.example.algalogapi.api.controller;
 
+import com.example.algalogapi.api.assembler.CustomerAssembler;
+import com.example.algalogapi.api.dto.CustomerRequest;
+import com.example.algalogapi.api.dto.CustomerResponse;
 import com.example.algalogapi.domain.entity.Customer;
 import com.example.algalogapi.domain.service.CustomerService;
 import jakarta.validation.Valid;
+import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -13,35 +17,37 @@ import java.util.UUID;
 
 @RestController
 @RequestMapping(value = "/customers")
+@AllArgsConstructor
 public class CustomerController {
-    @Autowired
     private CustomerService customerService;
+    private CustomerAssembler customerAssembler;
     @GetMapping
-    public List<Customer> findAll(){
-        return customerService.findAll();
+    public List<CustomerResponse> findAll(){
+        return customerAssembler.toCollectionDto(customerService.findAll());
     }
     @GetMapping("/{id}")
-    public ResponseEntity<Customer> find(@PathVariable UUID id){
+    public ResponseEntity<CustomerResponse> find(@PathVariable UUID id){
          return  customerService.findById(id)
-                    .map(ResponseEntity::ok)
+                    .map(customer -> ResponseEntity.ok(customerAssembler.toEntityDto(customer)))
                     .orElse(ResponseEntity.notFound().build());
 
     }
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public Customer insert(@Valid @RequestBody Customer customer){
+    public Customer insert(@Valid @RequestBody CustomerRequest customerRequest){
+        var customer = customerAssembler.toEntityDomian(customerRequest);
         return customerService.insert(customer);
     }
     @PutMapping("/{id}")
-    public  ResponseEntity<Customer> update(@PathVariable UUID id, @Valid @RequestBody Customer customer){
-        var customerResponse = customerService.findById(id);
+    public  ResponseEntity<Customer> update(@PathVariable UUID id, @Valid @RequestBody CustomerRequest customerRequest){
+        var customerResult = customerService.findById(id);
 
-        if (!customerResponse.isPresent()){
+        if (!customerResult.isPresent()){
             return ResponseEntity.notFound().build();
         }
+        var customer = customerAssembler.toEntityDomian(customerRequest);
         customer.setId(id);
         customer = customerService.update(customer);
-
         return ResponseEntity.ok(customer);
     }
     @DeleteMapping("/{id}")

@@ -1,6 +1,6 @@
 package com.example.algalogapi.domain.service;
 
-import com.example.algalogapi.domain.entity.Customer;
+
 import com.example.algalogapi.domain.entity.Delivery;
 import com.example.algalogapi.domain.entity.StatusDelivery;
 import com.example.algalogapi.domain.exception.BusinessRuleException;
@@ -10,7 +10,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.time.LocalDateTime;
 import java.time.OffsetDateTime;
 import java.util.List;
 import java.util.Optional;
